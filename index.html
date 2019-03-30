@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Hunter RFM Ver0.9.1</title>
+		<style>
+
+		#login{
+			position: absolute;
+			top : 80vh ;
+			width:100% ;
+			text-align:center;
+			font-size:30px ;
+		}
+
+		body {
+		  font-family: �L�n��;
+		  font-weight:bold;
+		  background-color: #7bcbd1;
+		  color: #fff;
+		  margin: 0px;
+		  overflow: hidden;
+		}
+
+		#gameMenu{
+			position: absolute;
+			z-index: 1;
+			height : 70% ;
+			width : 50% ;
+			top:5vh;
+			left:25vw;
+		}
+
+		#gameScreen{
+			z-index: 1;
+			position:absolute;
+			top:20vh;
+			background:black;
+			width:75vw ;
+			height:80vh;
+		}
+
+		#playerName {
+			z-index: 1 ;
+			position: absolute;
+			left:10vw;
+			font-size:2rem;
+			color: #efec94;
+			font-family: �L�n��;
+			font-weight:bold;
+		}
+
+		#playerPhoto {
+			z-index: 1 ;
+			position: absolute;
+			top:2vh ;
+			left:0vw;
+			width:10%;
+			height:15%;
+		}
+
+		#playerST {
+			z-index: 1;
+			position: absolute;
+			width:40vw;
+			height:4vh;
+			top:8vh;
+			left:10vw;
+		}
+
+		#messages{
+			z-index: 2;
+			position: absolute;
+			width:25vw;
+			height:20vh;
+			bottom:0vh;
+			border:8px;
+			border-style:ridge;
+			border-color:orange;
+			font-size:15px;
+			font-weight:bold;
+			opacity:0.55;
+		}
+
+		#smallMap {
+			z-index: 2 ;
+			position: absolute;
+			bottom:0vh;
+			right:0vw;
+			border:8px;
+			border:8px;
+			border-style:ridge;
+			border-color:cyan;
+			width:24vw;height:50vh;
+		}
+
+		#replay{
+			z-index: 2 ;
+			position: absolute;
+			bottom:18vh;
+			left:30vw;
+			background-image:url(https://i.imgur.com/YhioXWB.png);
+			background-size:contain;
+			width:195px;
+			height:195px;
+			border-radius:99em;
+			border-color:#7bcbd1;
+		}
+
+		#treasureInfo{
+			z-index: 2 ;
+			position: absolute;
+			top:3vh;
+			width:100%;
+			text-align: center;
+			color: #88ff00;
+		}
+
+		</style>
+	</head>
+	<body>
+	<img id = 'gameMenu' src="https://i.imgur.com/Q4A3Ssl.jpg">
+	<div id = "login" >
+		Please enter your name <br>
+		<input type = "text" id = 'uname' ><button id='submit1'>Login</button>
+	</div>
+
+	<div id = "gameInfo" style = "display:none">
+		<div id='gameScreen' >
+			<font size="10">
+				<p id = 'treasureInfo' style = "display:none"> </p>
+			</font>
+		</div>
+		<p id = 'playerName'></p>
+		<img id = 'playerPhoto' src="https://i.imgur.com/KnWf7hN.png">
+		<meter id = 'playerST' value="100" min="0" low="30" high="300" max="100" ></meter>
+		<textarea id='messages' readonly="readonly" ></textarea>
+		<div id = 'smallMap'  ></div>
+		<div id = "replayInfo" style = "display:none"><input  type="button"   id="replay" ></div>
+	</div>
+
+	<!-- music -->
+	<audio id="alertsound" style="display:none">
+		<source src="./sound/Alert.mp3" type='audio/mpeg'>
+	</audio>
+
+	<audio id="title" loop style="display:none">
+		<source src="./sound/Title.mp3" type='audio/mpeg'>
+	</audio>
+
+	<audio id="bgm" loop style="display:none">
+		<source src="./sound/BGM.mp3" type='audio/mpeg'>
+	</audio>
+	<!-- /music -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+	<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+	<script src="https://rawgit.com/jyunming-chen/tutsplus/master/js/text2D.js"></script>
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+	<script src = "state-machine.js"></script>
+	<script src = "detect.js"></script>
+	<script src = "obstacle.js"></script>
+	<script src = "KeyboardForHunterRFM.js"></script>
+
+	<!-- Hunter -->
+	<script src = "hunter/hunterFSM.js"></script>
+	<script src = "hunter/actionH.js"></script>
+	<script src = "hunter/createH.js"></script>
+
+	<!-- Player -->
+	<script src = "player/actionP.js"></script>
+	<script src = "player/createP.js"></script>
+
+	<!-- Treasure -->
+	<script src = "treasure.js"></script>
+
+	<!-- Game Over -->
+	<script src = "over.js"></script>
+
+	<script src = "loader.js"></script>
+
+	<script src = "items.js"></script>
+
+	<script src = "smallestCircle.js"></script>
+
+<script>
+var stats;
+var camera, scene, renderer, controls;
+var camera2, scene2 , renderer2;
+var sceneDead, cameraDead;
+var sceneWin, cameraWin, eat = 0;
+var keyboard = new KeyboardState();
+var player = new THREE.Object3D();
+var stop = true, direction = 0;
+
+//////////////////////////////////////////////////////////////////
+
+var username ;                     //���a�W�r
+var pos, vel, force;               //���a�����m�B�t�סB�O �]d-drive�^
+var angle = 0, pow = 200;          //���a���ਤ�סA���a�e�i�O�q
+var Rad = 5    ;                   //���a�������b�|�A�ΨӧP�_�O�_���M��ê����Ĳ��
+var stamina = 100 ;                //���a���O
+var rest = false ;                 //���O���ӹL�C�ɧP�_�O�_����
+
+var mass = 1;                      //for d-drive
+var clockA;                        //for d-drive
+
+///////////////////////////////////////////////////////////////////
+
+var obj = [] ; // �s���Ҧ���ê���M�H���A���u���y�ɩҥ�
+var obstacles = [] ; // �s����ê�����}�C
+var hunters = [] ; // �s���y�H���}�C
+
+var catched = false;
+var eatOver = false;
+var start = false;
+
+var raycaster;
+var mouse = new THREE.Vector2();
+var pickables = [];
+var arrow = new THREE.Object3D();
+var hint = false;
+var hintTarget;
+
+var SpriteText2D = THREE_Text.SpriteText2D;
+var textAlign = THREE_Text.textAlign;
+
+var count = 1 ;
+
+// for music // 0.5.7 ?
+var alertSound, soundTrack;
+
+// for timer // 0.5.7 ?
+var startT;
+var angleTime;
+var clock = new THREE.Clock();
+var sector;
+
+// for sprite animation
+var spriteCounter = 0 ;
+var baseS = 0;
+var stArray = [];
+var ruby ;
+
+// for smallMap
+var playerIcon , hunterIcon ;
+//var treasure , treasureIcon ;
+
+
+// for Treasure Sprite Animation
+var treasures = [] ;
+var treasureIcons = [] ;
+var tCount = 0 ;
+var treasuseSpriteArray = [] ;
+var baseT = 0 ;
+
+var cCount = 0 ;
+var crystalSpriteArray = [] ;
+var baseC = 0 ;
+
+// for Hunter Sprite Animation
+
+var SCount = 0 ;
+//var HCount = 0 ;
+var hunterSpriteArray = [] ;
+var walkState , standState ;
+
+//6.1
+// �N��ê���]��Global Varible�A�C�����ҹC���ɤ��ΦA�зs���A���s�[�Jobj�Mobstacles�}�C�Y�i
+var wall1 , wall2 , wall3 , wall4 , wall5, wall6 , wall7 , wall8 , wall9 , wall10, wall11, wall12;
+var box1, box2 , box3 , box4 , box5, box6, box7, box8 ;
+
+var balls = [] ;
+var ballIcons = [] ;
+
+var getStrength = false ;
+
+var groundSize = 500 ;
+
+$('#submit1').click (function() {
+		$('#gameMenu').css ('display', 'none');
+		$('#login').css ('display', 'none');
+		$('#gameInfo').css ('display', '');
+		$('#replayInfo').css ('display', 'none');
+		username = $('#uname').val();
+
+		$('#playerName').text(username);
+
+		raycaster = new THREE.Raycaster();
+		document.addEventListener('mousedown', onDocumentMouseDown, false);
+
+		// music 0.5.7 ?
+		soundTrack.pause();
+		soundTrack = document.getElementById ('bgm');
+
+		gameStart();     //�C���}�l
+
+		// �p�ɾ� 0.5.7 ?
+		startT = clock.getElapsedTime();
+});
+
+
+$('#replay').click (function() {
+
+	$('#replayInfo').css ('display', 'none');
+	gameStart();     //�C���}�l
+});
+
+function gameStart(){
+
+	if (catched || eatOver){
+		for (var i = 0; i < hunters.length; i++){
+			hunters[i].mesh.geometry.dispose();
+			scene.remove(hunters[i].mesh);
+			scene.remove(hunters[i]);
+		}
+		hunters = [] ;
+
+		obstacles = [] ;
+		obj = [] ;
+
+		catched = false;
+		eatOver = false;
+		count = 0 ;
+
+		ruby.geometry.dispose();
+		scene.remove(ruby);
+		scene.remove(player);
+		player = new THREE.Object3D();
+
+		scene2.remove(hunterIcon);
+		scene2.remove(playerIcon);
+
+		for( var i = 0 ; i < treasures.length ; i++ ){
+			treasures[i].geometry.dispose();
+			scene.remove(treasures[i]);
+			treasureIcons[i].geometry.dispose();
+			scene2.remove(treasureIcons[i]);
+		}
+		treasures = [] ;
+		treasureIcons = [] ;
+
+		for( var i = 0 ; i < balls.length ; i++ ){
+			//balls[i].mesh.geometry.dispose();
+			scene.remove(balls[i]);
+			//ballIcons[i].geometry.dispose();
+			//scene2.remove(ballIcons[i]);
+		}
+		balls = [] ;
+		ballIcons = [] ;
+
+	}
+
+	// music 0.5.7
+	soundTrack.play();
+
+	keyboard = new KeyboardState();
+
+	stamina = 100 ; // �C���}�l ���O�^�k�W��
+	angle = 0 ; // �C���}�l ���a���ਤ���k�s
+
+	setHunters();         // �гy�y�H
+	setTreasures();       // ���m�_��
+	createPlayer();       // �гy���a
+	setBalls();           // ���m�S���ĤY
+	scene.remove(arrow);
+
+	obj.push( wall1 , wall2 , wall3 , wall4 , wall5, wall6 , wall7 , wall8 , wall9 , wall10, wall11, wall12);
+	obstacles.push( wall1 , wall2 , wall3 , wall4 , wall5 , wall6 , wall7 , wall8, wall9 , wall10, wall11, wall12);
+
+	obj.push(box1 , box2 , box3 , box4 , box5, box6, box7, box8 );
+	obstacles.push(box1, box2 , box3 , box4 , box5, box6, box7, box8);
+
+	clockA = new THREE.Clock();
+
+	for (var i = 0; i < hunters.length; i++){
+		hunters[i].setRandomTarget();
+	}
+	$('#messages').text('');
+	getStrength = false ;
+	start = true ;
+
+}
+
+init();
+animate();
+
+function init(){
+
+	// music 0.5.7 ?
+	alertSound = document.getElementById ('alertsound');
+	soundTrack = document.getElementById ('title');
+	soundTrack.play();
+
+	renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.setSize($('#gameScreen').innerWidth(), $('#gameScreen').innerHeight());
+	renderer.setClearColor(0x888888);
+	$('#gameScreen').append(renderer.domElement);
+
+	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 20000);
+
+	var ww = $("#smallMap").innerWidth() ;
+	var hh = $("#smallMap").innerHeight() ;
+
+	renderer2 = new THREE.WebGLRenderer({antialias: true});
+	renderer2.setSize(ww ,  hh);
+	renderer2.setClearColor(0x666666);
+	$("#smallMap").append(renderer2.domElement);
+
+	camera2 = new THREE.OrthographicCamera( ww/-4 , ww/4 , hh/4 , hh/-4 , 1, 1000);
+
+	// scene
+	scene = new THREE.Scene();
+	gridxz = new THREE.GridHelper(500, 50, 'red', 'white');
+	scene.add(gridxz);
+
+	scene2 = new THREE.Scene();
+	gridxz = new THREE.GridHelper(500, 50, 'red', 'white');
+	scene2.add(gridxz);
+
+	var ambient = new THREE.AmbientLight(0x777777);
+	scene.add(ambient);
+	scene2.add(ambient.clone());
+
+	var directionalLight = new THREE.DirectionalLight(0xffffff);
+	directionalLight.position.set(0, 1, 1).normalize();
+	scene.add(directionalLight);
+	scene2.add(directionalLight.clone());
+
+	controls = new THREE.OrbitControls(camera, renderer.domElement);
+	window.addEventListener('resize', onWindowResize, false);
+
+	var geometry = new THREE.PlaneGeometry(500, 500);
+	var material = new THREE.MeshLambertMaterial();
+
+	buildGround();
+
+	renderer.autoClear = false;
+	/*
+	stats = new Stats();
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.top = '3vh';
+	stats.domElement.style.right = '3vw';
+	stats.domElement.style.zIndex = 100;
+	document.body.appendChild( stats.domElement );
+	*/
+    buildObstacles();     // �гy��ê��
+}
+
+function buildGround(){
+	var ground = loadRepeatTexture( groundSize , 'https://i.imgur.com/iFY6yIi.jpg' ) ;
+	scene.add(ground);
+	ground.rotation.x = -Math.PI / 2;
+	ground.position.y = 0.5;
+}
+
+function onDocumentMouseDown(event) {
+
+ event.preventDefault();
+ var ww2 = $("#smallMap").innerWidth();
+ var hh2 = $("#smallMap").innerHeight();
+ mouse.x = (event.clientX / ww2) * 2 - 22/3;
+ mouse.y = -(event.clientY / hh2) * 2 + 3;
+
+ // find intersections
+ raycaster.setFromCamera(mouse, camera2);
+ var intersects = raycaster.intersectObjects(pickables);
+ if (intersects.length > 0) {
+
+  hint = true;
+  if(intersects[0].object == treasureIcons[0])
+   foundTreasure(treasureIcons[0]);
+  else if(intersects[0].object == treasureIcons[1])
+   foundTreasure(treasureIcons[1]);
+  else if(intersects[0].object == treasureIcons[2])
+   foundTreasure(treasureIcons[2]);
+  else if(intersects[0].object == treasureIcons[3])//6.1
+   foundTreasure(treasureIcons[3]);
+
+ }
+}
+
+function onWindowResize() {
+
+	var ww = $("#gameScreen").innerWidth();
+	var hh = $("#gameScreen").innerHeight();
+
+	camera.aspect =  ww / hh ;
+	camera.updateProjectionMatrix();
+	renderer.setSize(ww, hh);
+
+	var ww2 = $("#smallMap").innerWidth();
+	var hh2 = $("#smallMap").innerHeight();
+
+	camera2.aspect = ww2 / hh2;
+	camera2.updateProjectionMatrix();
+	renderer2.setSize(ww2, hh2);
+
+}
+
+function animate(){
+
+	if( start ) {
+
+		if(hint){
+			theHint();
+			if(player.position.distanceTo(hintTarget.position) <= 8){
+				hint = false ;
+				scene.remove(arrow);
+			}
+		}
+	// for Player
+		move();
+		$("#playerST").val(stamina);
+
+		var cameraOffset = player.localToWorld(new THREE.Vector3(0, 40, 40));
+		camera.position.copy(cameraOffset);
+		camera.lookAt( player);
+
+		findMinTreasure();
+
+		controls.target = player.position ;// whatever Vector3 you are using already
+
+	// for Hunter
+		if (!catched){
+
+			hunterAction();
+
+		}
+
+	// for Treasure
+
+		tCount++ ;
+		if( tCount % 8 === 0 )
+			for( var i = 0 ; i < treasures.length ; i++)
+				spriteTreasure( i , i + 1 );
+		for( var i = 0 ; i < treasures.length ; i++){
+			//treasureIcons[i].lookAt (camera2.position);
+			treasures[i].rotation.y = angle ;
+			if( player.position.distanceTo(treasures[i].position) <= 8) {
+				scene.remove(treasures[i]);
+				scene2.remove(treasureIcons[i]);
+				treasures[i].obtain = true;
+			}
+		}
+		for ( var i = 0 ; i < treasures.length ; i++ ) {
+
+			if(treasures[0].obtain == true && treasures[1].obtain == true &&
+			   treasures[2].obtain == true && treasures[3].obtain == true ) {
+
+				eatOver = true;
+				start = false;
+			}
+		}
+
+		// 0.5.7 ? timer
+		//var dt = clock.getElapsedTime() - startT;
+		//angleTime = stopAngle - 2 * dt / 180 * Math.PI;
+	}
+	else if (catched){
+
+		for(var i = 0; i < hunters.length; i++){
+
+			hunters[i].force = new THREE.Vector3();
+			hunters[i].vel = new THREE.Vector3();
+			hunters[i].find = false ;
+			hunters[i].fsm.current = "catch";
+		}
+
+		dead();
+		$('#replayInfo').css ('display', '');
+
+	}
+	else if (eatOver) {
+
+		for(var i = 0; i < hunters.length; i++){
+
+			hunters[i].force = new THREE.Vector3();
+			hunters[i].vel = new THREE.Vector3();
+			hunters[i].find = false ;
+			hunters[i].fsm.current = "catch";
+		}
+
+		win();
+		$('#replayInfo').css ('display', '');
+
+	}
+	// for system
+	controls.update();
+	//stats.update();
+	requestAnimationFrame(animate);
+	render();
+}
+
+function render(){
+
+	renderer.clear();
+	renderer.render(scene, camera);
+	renderer2.render(scene2, camera2);
+	if(catched)
+		renderer.render(sceneDead, cameraDead);
+	else if(eatOver)
+		renderer.render(sceneWin, cameraWin);
+}
+
+</script>
+</body>
+
+</html>
