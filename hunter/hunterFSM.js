@@ -1,4 +1,4 @@
-var hunterFSM = function (mesh, text){
+ï»¿var hunterFSM = function (mesh, text){
   
   var timer;
   
@@ -31,25 +31,25 @@ var hunterFSM = function (mesh, text){
 		onbeforecaught:     function(event, from, to) { },
 
 		onfound:            function(event, from, to) { 
-			//µø½u®·®»¨ìª±®a(§ó§ïState¦ÜSeek)
+			//è¦–ç·šæ•æ‰åˆ°ç©å®¶(æ›´æ”¹Stateè‡³Seek)
 		},
 		onproximity:        function(event, from, to) {
-			//Å¥¤O½d³ò±µÄ²¨ìª±®a(§ó§ïState¦ÜSearch)
+			//è½åŠ›ç¯„åœæ¥è§¸åˆ°ç©å®¶(æ›´æ”¹Stateè‡³Search)
 		},
 		onstood:          function(event, from, to) {
-			//¸g¹L¤@¬q®É¶¡«á(¨â¬í)¡A¶}©l¨µÅŞ(§ó§ïState¦ÜPatrol)
+			//ç¶“éä¸€æ®µæ™‚é–“å¾Œ(å…©ç§’)ï¼Œé–‹å§‹å·¡é‚(æ›´æ”¹Stateè‡³Patrol)
 		},
 		onpatrolled:        function(event, from, to) {
-			//¨µÅŞ¤@¬q®É¶¡«á(¤­¬í)¡A¦^¨ì¯¸¥ßª¬ºA(§ó§ïState¦ÜStand)
+			//å·¡é‚ä¸€æ®µæ™‚é–“å¾Œ(äº”ç§’)ï¼Œå›åˆ°ç«™ç«‹ç‹€æ…‹(æ›´æ”¹Stateè‡³Stand)
 		},
 		onlost:             function(event, from, to) {
-			//°l¥áª±®a(§ó§ïState¦ÜSearch)
+			//è¿½ä¸Ÿç©å®¶(æ›´æ”¹Stateè‡³Search)
 		},
 		onnfound:           function(event, from, to) {
-			//·j´M¹L«á¡A¨Sµo²{ª±®a(§ó§ïState¦ÜStand)
+			//æœå°‹éå¾Œï¼Œæ²’ç™¼ç¾ç©å®¶(æ›´æ”¹Stateè‡³Stand)
 		},
 		oncaught:          function(event, from, to) {
-			//§ì¨ìª±®a(§ó§ïState¦ÜCatch)
+			//æŠ“åˆ°ç©å®¶(æ›´æ”¹Stateè‡³Catch)
 		},
 
 		onleavestand:       function(event, from, to) { },
@@ -59,11 +59,11 @@ var hunterFSM = function (mesh, text){
 
 		onstand:            function(event, from, to) {
 		
-			var textarea = $('#messages').append("Ây¤H¥¿¦b­ì¦a¥ğ®§¤¤\n");
+			var textarea = $('#messages').append("çµäººæ­£åœ¨åŸåœ°ä¼‘æ¯ä¸­\n");
 			textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 			
-			//¯¸©wÂI¡]©ñºC³t¡^Æ[¹î
-			//¨C¨â¬íÂà´«¦¨patrolª¬ºA
+			//ç«™å®šé»ï¼ˆæ”¾æ…¢é€Ÿï¼‰è§€å¯Ÿ
+			//æ¯å…©ç§’è½‰æ›æˆpatrolç‹€æ…‹
 			text.text = "Hunter : Stand";
 		
 			clearTimeout(timer);
@@ -77,7 +77,7 @@ var hunterFSM = function (mesh, text){
 		},
 		onsearch:           function(event, from, to) {
 		
-			//­ì¦a±ÛÂà´M§äª±®a
+			//åŸåœ°æ—‹è½‰å°‹æ‰¾ç©å®¶
 			text.text = "Hunter : Search";
 		
 			clearTimeout(timer);
@@ -87,7 +87,7 @@ var hunterFSM = function (mesh, text){
 		},
 		onseek:             function(event, from, to) {
 			
-			//°l³vª±®a
+			//è¿½é€ç©å®¶
 			text.text = "Hunter : Seek" ;
 		
 			clearTimeout(timer);
@@ -97,11 +97,11 @@ var hunterFSM = function (mesh, text){
 		},
 		onpatrol:           function(event, from, to) {
 		
-			var textarea = $('#messages').append("Ây¤H¶}©l¨µÅŞ\n");
+			var textarea = $('#messages').append("çµäººé–‹å§‹å·¡é‚\n");
 			textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 			
-			//ÀH¾÷µ¹¤©¤@­Ótarget¨ÏÂy¤H©¹¨º¤è¦V¦æ¨«
-			//¨C¤K¬í¦^¨ìstandª¬ºA
+			//éš¨æ©Ÿçµ¦äºˆä¸€å€‹targetä½¿çµäººå¾€é‚£æ–¹å‘è¡Œèµ°
+			//æ¯å…«ç§’å›åˆ°standç‹€æ…‹
 			text.text = "Hunter : Patrol" ;
 			
 			clearTimeout(timer);
@@ -111,7 +111,7 @@ var hunterFSM = function (mesh, text){
 		},
 		oncatch:            function(event, from, to) { 
 		
-			//¹CÀ¸µ²§ô
+			//éŠæˆ²çµæŸ
 			text.text = "Hunter : Catch";
 		
 			clearTimeout(timer);

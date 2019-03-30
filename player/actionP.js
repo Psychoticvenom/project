@@ -1,4 +1,4 @@
-function move(){
+ï»¿function move(){
 
 	keyboard.update();
   
@@ -10,7 +10,7 @@ function move(){
 			stamina = 100 ;
 			ruby.material.color  = new THREE.Color("rgb(255, 255, 0)");
 			getStrength = true ;
-			var textarea = $('#messages').append("Àò±o¤F¤j¤O¤Y¡A5¬í¤ºµL­­Åé¤O¥B³t«×ÅÜ§Ö¡I\n");
+			var textarea = $('#messages').append("ç²å¾—äº†å¤§åŠ›ä¸¸ï¼Œ5ç§’å…§ç„¡é™é«”åŠ›ä¸”é€Ÿåº¦è®Šå¿«ï¼\n");
 			textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 			
 			var timer = setTimeout (function() {
@@ -21,7 +21,7 @@ function move(){
 		
 	}
 	
-    if( stamina <= 0 )  rest = true ; // Åé¤O§C©ó0ªº¸Ü±o¥ğ®§¤@¤U
+    if( stamina <= 0 )  rest = true ; // é«”åŠ›ä½æ–¼0çš„è©±å¾—ä¼‘æ¯ä¸€ä¸‹
   
     if( stamina <= 40)
 		ruby.material.opacity = 0.4 ; 
@@ -36,25 +36,25 @@ function move(){
 		
 	if( rest){
 		stop  = true ; 
-		if ( stamina <= 30)  stamina += 0.2 ;   // ¥ğ®§®É­Ô¥²¶·­n«ì´_¨ì¤@©w­È¡]30¡^¤~¯àÄ~Äò¦æ°Ê
+		if ( stamina <= 30)  stamina += 0.2 ;   // ä¼‘æ¯æ™‚å€™å¿…é ˆè¦æ¢å¾©åˆ°ä¸€å®šå€¼ï¼ˆ30ï¼‰æ‰èƒ½ç¹¼çºŒè¡Œå‹•
 		else  rest = false ; 
 	}
 	else {
 		
-		if (keyboard.pressed("up") ) { // «e¶i¤¤ ´î¤ÖÅé¤O
+		if (keyboard.pressed("up") ) { // å‰é€²ä¸­ æ¸›å°‘é«”åŠ›
 			stop  = false ; 
 			if( stamina > 0 && !getStrength ) stamina -= 0.2 ; 
 		}
-		else{ // ¨S¦³«e¶i«İ¦b­ì¦a¡AÀH®É¶¡«ì´_Åé¤O
+		else{ // æ²’æœ‰å‰é€²å¾…åœ¨åŸåœ°ï¼Œéš¨æ™‚é–“æ¢å¾©é«”åŠ›
 			if( stamina < 100 ) stamina += 0.1 ;
 			stop  = true ; 
 		}
 		
-		if (keyboard.pressed("right")) { // ©¹¥kÂà
+		if (keyboard.pressed("right")) { // å¾€å³è½‰
 			direction = -Math.PI/16;
 			angle -= 0.05 ;   //5.7
 		}
-		else if (keyboard.pressed("left")) { // ©¹¥ªÂà
+		else if (keyboard.pressed("left")) { // å¾€å·¦è½‰
 			direction = Math.PI/16;
 			angle += 0.05 ;  //5.7
 		}
@@ -83,7 +83,7 @@ function move(){
 	// pos = pos + vel * dt
 	  
 	//6.1
-	for( var i = 0 ; i < obstacles.length ; i++ ){  // ¸I¼²°»´ú
+	for( var i = 0 ; i < obstacles.length ; i++ ){  // ç¢°æ’åµæ¸¬
 		if( obstacles[i].pos.distanceTo(pos) <= obstacles[i].boundingCircleR + 6 ){
 			vel = vel.clone().sub (collisionDetection( pos.x  , pos.z  , i  , 6 , vel )  );
 			console.log( i + 1 );

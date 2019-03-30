@@ -1,4 +1,4 @@
-var lost = false;
+ï»¿var lost = false;
 var alert = false;
 
 function computeNbhd() {
@@ -32,11 +32,11 @@ var hunterAction = function (){
 			
 			var geometry = hunters[i].mesh.geometry;
 			// 5.7
-			// §Q¥Î ª±®aµø½u¥¿«e¤è ©M Ây¤H«e¤è¡]³t«×¤è¦V¡^ ¨âªÌ¤§¶¡ªº¨¤«×¡A¨Ó­pºâÂy¤HÀ³Åã¥Üªº¤è¦ì
+			// åˆ©ç”¨ ç©å®¶è¦–ç·šæ­£å‰æ–¹ å’Œ çµäººå‰æ–¹ï¼ˆé€Ÿåº¦æ–¹å‘ï¼‰ å…©è€…ä¹‹é–“çš„è§’åº¦ï¼Œä¾†è¨ˆç®—çµäººæ‡‰é¡¯ç¤ºçš„æ–¹ä½
 			var playerDirection = new THREE.Vector3( 0 , 0 , 1).applyAxisAngle ( new THREE.Vector3(0 , 1 , 0 ), angle );
 			var tmpAngle = playerDirection.clone().angleTo( new THREE.Vector3(hunters[i].vel.x, 0 , hunters[i].vel.z) ) ;
 			
-			// ­pºâ¨â¦V¶qªº¥~¿n¡A¨Ó§PÂ_Ây¤HÅã¥Ü¤è¦V´Â¥ªÁÙ¬O´Â¥k	
+			// è¨ˆç®—å…©å‘é‡çš„å¤–ç©ï¼Œä¾†åˆ¤æ–·çµäººé¡¯ç¤ºæ–¹å‘æœå·¦é‚„æ˜¯æœå³	
 			var test = playerDirection.clone().cross( new THREE.Vector3(hunters[i].vel.x, 0 , hunters[i].vel.z)  ) ;
 			
 			var currentX , currentY ;
@@ -121,7 +121,7 @@ var hunterAction = function (){
 			if( hunters[i].find ){
 				
 				hunters[i].fsm.found();
-				var textarea = $('#messages').append("Ây¤Hµo²{¤Fª±®a " + username +" ¡I\n");
+				var textarea = $('#messages').append("çµäººç™¼ç¾äº†ç©å®¶ " + username +" ï¼\n");
 				textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 				hunters[i].target = player.position.clone();
 				
@@ -129,7 +129,7 @@ var hunterAction = function (){
 			
 			if(  player.position.clone().distanceTo(hunters[i].pos) <= 30 && stop == false ){
 				hunters[i].fsm.proximity();
-				var textarea = $('#messages').append("Ây¤HÅ¥¨ì¤F¤@¨ÇÁn­µ...\n");
+				var textarea = $('#messages').append("çµäººè½åˆ°äº†ä¸€äº›è²éŸ³...\n");
 				textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 			}
 			
@@ -147,7 +147,7 @@ var hunterAction = function (){
 			if( hunters[i].tmp >= Math.PI * 2 ){  	
 				hunters[i].tmp = 0;
 				hunters[i].fsm.nfound();
-				var textarea = $('#messages').append("Ây¤H¨S¦³·j¯Á¨ìª±®a\n");
+				var textarea = $('#messages').append("çµäººæ²’æœ‰æœç´¢åˆ°ç©å®¶\n");
 				textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 			}
 			
@@ -193,7 +193,7 @@ var hunterAction = function (){
 				hunters[i].tmp = 0;
 				hunters[i].target = player.position.clone();
 				hunters[i].fsm.found();
-				var textarea = $('#messages').append("Ây¤H¦b·j¯Á¤¤µo²{¤Fª±®a " + username +" ¡I\n");
+				var textarea = $('#messages').append("çµäººåœ¨æœç´¢ä¸­ç™¼ç¾äº†ç©å®¶ " + username +" ï¼\n");
 				textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 				hunters[i].target = player.position.clone();
 				
@@ -218,7 +218,7 @@ var hunterAction = function (){
 			if( intersectsA.length !== 0 && intersectsA[0].object.name === "Player" ){
 					hunters[i].find = true ; 
 			}
-			else{ // ·j´Mµø³¥¤¤¬O§_¦³¥Ø¼Ğª«¥X²{
+			else{ // æœå°‹è¦–é‡ä¸­æ˜¯å¦æœ‰ç›®æ¨™ç‰©å‡ºç¾
 				hunters[i].find = false ; 
 				for( var count = 1 , tmp = 62 ; count < hunters[i].sightN ; count++ ){
 					tmp -= 124/hunters[i].sightN ; 
@@ -271,7 +271,7 @@ var hunterAction = function (){
 			hunters[i].maxForce = 10 ;
 				
 			if ( hunters[i].target.length() == 0 || hunters[i].pos.distanceTo(hunters[i].target) <= 5 )
-				hunters[i].setRandomTarget();                         // ¥|³B¶Ã³}®É ­Y¬O¤w¨ì¹F¥Ø¼ĞÂI¦AÀH¾÷³]¸m¥Ø¼Ğ
+				hunters[i].setRandomTarget();                         // å››è™•äº‚é€›æ™‚ è‹¥æ˜¯å·²åˆ°é”ç›®æ¨™é»å†éš¨æ©Ÿè¨­ç½®ç›®æ¨™
 			
 			
 			for( var count = 0 ; count < balls.length ; count++ ){
@@ -281,7 +281,7 @@ var hunterAction = function (){
 					hunters[i].sightN = 40 ;
 					hunters[i].sightD = 300 ; 
 					hunters[i].getStrength = true ;
-					var textarea = $('#messages').append("Ây¤HÀò±o¤F¤j¤O¤Y¡A15¬í¤º¥iµø«×ÅÜ°ª¡I\n");
+					var textarea = $('#messages').append("çµäººç²å¾—äº†å¤§åŠ›ä¸¸ï¼Œ15ç§’å…§å¯è¦–åº¦è®Šé«˜ï¼\n");
 					textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 					
 					var timer = setTimeout (function() {
@@ -294,14 +294,14 @@ var hunterAction = function (){
 			
 			hunters[i].find = false ; 
 			//5.7
-			// ©T©w´Â¥¿«e¤è¬İ
+			// å›ºå®šæœæ­£å‰æ–¹çœ‹
 			var sight = new THREE.Vector3(1, 0 , 0).applyAxisAngle(new THREE.Vector3(0, 1, 0), hunters[i].angle ).normalize();		
 			var raycasterA = new THREE.Raycaster( hunters[i].pos , sight , 0 , hunters[i].sightD );
 			var intersectsA = raycasterA.intersectObjects(obj , true);
 			if( intersectsA.length !== 0 && intersectsA[0].object.name === "Player" ){
 					hunters[i].find = true ; 
 			}
-			else{ // ·j´Mµø³¥¤¤¬O§_¦³¥Ø¼Ğª«¥X²{
+			else{ // æœå°‹è¦–é‡ä¸­æ˜¯å¦æœ‰ç›®æ¨™ç‰©å‡ºç¾
 				hunters[i].find = false ;
 				for( var count = 1 , tmp = 62 ; count < hunters[i].sightN ; count++ ){
 					tmp -= 124/hunters[i].sightN ; 
@@ -319,14 +319,14 @@ var hunterAction = function (){
 			}
 			if( hunters[i].find){
 					hunters[i].fsm.found();
-					var textarea = $('#messages').append("Ây¤H¦b¨µÅŞ¤¤µo²{¤Fª±®a " + username +" ¡I \n");
+					var textarea = $('#messages').append("çµäººåœ¨å·¡é‚ä¸­ç™¼ç¾äº†ç©å®¶ " + username +" ï¼ \n");
 					textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 					hunters[i].target = player.position.clone();
 					
 				}
 			else if ( player.position.clone().distanceTo(hunters[i].pos) <= 30 && stop == false ){
 					hunters[i].fsm.proximity();
-					var textarea = $('#messages').append("Ây¤HÅ¥¨ì¤F¤@¨ÇÁn­µ...\n");
+					var textarea = $('#messages').append("çµäººè½åˆ°äº†ä¸€äº›è²éŸ³...\n");
 					textarea.scrollTop(textarea[0].scrollHeight - textarea.height());		
 			}
 			//6.1

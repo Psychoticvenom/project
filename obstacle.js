@@ -1,4 +1,4 @@
-function buildObstacles(){
+ï»¿function buildObstacles(){
 	//6.1
 	wall1 = buildWall( new THREE.Vector3( 50 , 10 , -45) , 0, 50 , 20 ,  10, "1" )  ;
 	wall2 = buildWall( new THREE.Vector3( -140 , 10 , 30) ,  0 , 60 , 20 ,  10, "2" );
@@ -48,7 +48,7 @@ function buildWall( initPos , angleW , boxX , boxY , boxZ, name ){
 	wall.name = "Wall" + name ;
 	wall.angle = angleW ;
 	
-	//­pºâ³Ì¤p¥]­Y¶ê
+	//è¨ˆç®—æœ€å°åŒ…è‹¥åœ“
 	wall.updateMatrixWorld();
 	var tmp =  wall.localToWorld( new THREE.Vector3( boxX/2,0,-boxZ/2) ); 
 	var pointA = {x: tmp.x, y: tmp.z} ;
@@ -68,7 +68,7 @@ function buildWall( initPos , angleW , boxX , boxY , boxZ, name ){
 	wall.vectorN2 = new THREE.Vector3(0 , 0 , -1).applyAxisAngle( new THREE.Vector3(0,1,0) , angleW) ; 
 	wall.vectorN3 = new THREE.Vector3(1 , 0 , 0).applyAxisAngle( new THREE.Vector3(0,1,0) , angleW) ; 
 	wall.vectorN4 = new THREE.Vector3(-1 , 0 , 0).applyAxisAngle( new THREE.Vector3(0,1,0) , angleW) ;
-    // ¥H¤W¥|­Ó¦V¶q¬°¦¹»ÙÃªª«¤¤¥|­Ó­±ªºªk½u¦V¶q¡A·íª±®a¼²¨ì®É·|µ¹¤©¤@¤O¨Ï¨äªuµÛÀğ¾Àªº­±«e¶i
+    // ä»¥ä¸Šå››å€‹å‘é‡ç‚ºæ­¤éšœç¤™ç‰©ä¸­å››å€‹é¢çš„æ³•ç·šå‘é‡ï¼Œç•¶ç©å®¶æ’åˆ°æ™‚æœƒçµ¦äºˆä¸€åŠ›ä½¿å…¶æ²¿è‘—ç‰†å£çš„é¢å‰é€²
 	
 	return wall ;
 
@@ -96,7 +96,7 @@ function buildBox( initPos , angleW , boxX , name ){
 	box.name = "Box" + name ;
 	box.angle = angleW ;
 	
-	//­pºâ³Ì¤p¥]­Y¶ê
+	//è¨ˆç®—æœ€å°åŒ…è‹¥åœ“
 	box.updateMatrixWorld();
 	var tmp =  box.localToWorld( new THREE.Vector3( boxX/2,0,-boxX/2) ); 
 	var pointA = {x: tmp.x, y: tmp.z} ;
@@ -116,7 +116,7 @@ function buildBox( initPos , angleW , boxX , name ){
 	box.vectorN2 = new THREE.Vector3(0 , 0 , -1).applyAxisAngle( new THREE.Vector3(0,1,0) , angleW) ; 
 	box.vectorN3 = new THREE.Vector3(1 , 0 , 0).applyAxisAngle( new THREE.Vector3(0,1,0) , angleW) ; 
 	box.vectorN4 = new THREE.Vector3(-1 , 0 , 0).applyAxisAngle( new THREE.Vector3(0,1,0) , angleW) ;
-    // ¥H¤W¥|­Ó¦V¶q¬°¦¹»ÙÃªª«¤¤¥|­Ó­±ªºªk½u¦V¶q¡A·íª±®a¼²¨ì®É·|µ¹¤©¤@¤O¨Ï¨äªuµÛÀğ¾Àªº­±«e¶i
+    // ä»¥ä¸Šå››å€‹å‘é‡ç‚ºæ­¤éšœç¤™ç‰©ä¸­å››å€‹é¢çš„æ³•ç·šå‘é‡ï¼Œç•¶ç©å®¶æ’åˆ°æ™‚æœƒçµ¦äºˆä¸€åŠ›ä½¿å…¶æ²¿è‘—ç‰†å£çš„é¢å‰é€²
 	
 	return box ;
 

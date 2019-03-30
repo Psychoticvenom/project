@@ -353,7 +353,7 @@ class Hunter{
 
 				onstand:            function(event, from, to) {
 
-					var textarea = $('#messages').append("�y�H���b���a�𮧤�\n");
+					var textarea = $('#messages').append("獵人正在原地休息中\n");
 					textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 
 					//���w�I�]���C�t�^�[��
@@ -388,7 +388,7 @@ class Hunter{
 				},
 				onpatrol:           function(event, from, to) {
 
-					var textarea = $('#messages').append("�y�H�}�l����\n");
+					var textarea = $('#messages').append("獵人開始巡邏\n");
 					textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
 
 					//�H�������@��target���y�H�������V�樫
